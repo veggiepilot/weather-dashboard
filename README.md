@@ -11,9 +11,10 @@ This app is for looking up the weather for a particular city and giving out a fi
 1. [INSTALLATION](#Installation)
 2. [USAGE](#Usage)
 3. [CONTRIBUTING](#Contributing)
-4. [TESTS](#Tests)
-5. [QUESTIONS](#Questions)
-6. [LICENSE](#License)
+4. [TECHNOLOGIES USED](#Technologies)
+5. [PROJECT DEMO](#Project)
+6. [QUESTIONS](#Questions)
+7. [LICENSE](#License)
 
 ## Installation
 
