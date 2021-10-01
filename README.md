@@ -12,7 +12,7 @@ This app is for looking up the weather for a particular city and giving out a fi
 2. [USAGE](#Usage)
 3. [CONTRIBUTING](#Contributing)
 4. [TECHNOLOGIES USED](#Technologies)
-5. [PROJECT DEMO](#Project)
+5. [PROJECT DEMO](#Demo)
 6. [QUESTIONS](#Questions)
 7. [LICENSE](#License)
 
@@ -28,14 +28,14 @@ The user can search for a city by inputting the city name in the search field. O
 
 Please email me at johanneschitura@gmail.com if you would like to contribute on this project.
 
-## Techonologies Used
+## Techonologies
 
 - Javascript 
 - HTML 
 - CSS 
 
 
-## Project Demo
+## Demo
 
 ![The weather app includes a search option to search for a city and it gives the current weather and a five-day forecast.](./assets/weather-app.gif)
 
