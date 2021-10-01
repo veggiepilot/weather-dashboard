@@ -1,18 +1,24 @@
-// API Key 988c77a58d9ae4c18536f5b3fcc5e2b6
 
 const cityBaseURL        = "https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial";
 const apiKey             = "&appid=988c77a58d9ae4c18536f5b3fcc5e2b6";
 const searchButton       = document.getElementById("search");
 const cityInput          = document.getElementsByClassName("form-control");
+const currentWeatherCard = document.getElementsByClassName("card");
 const searchHistory      = document.getElementById("search-history");
 const currentCityWeather = document.getElementsByClassName("current-city-weather");
-let city;
 const date               = moment().format("MM/DD/YYYY");
-const cardRow            = document.getElementsByClassName("row")[1];
+let cardRow              = document.getElementsByClassName("row")[1];
+let myStorage            = localStorage;
+let searchHistoryItem;
+let city;
 
 // Search button event listener
 searchButton.addEventListener("click", function() {
+    if (myStorage.length >= 5) {
+        searchHistory.removeChild(searchHistory.firstElementChild);
+    }
     city = cityInput[0].value.trim();
+    fetchCityWeather(city);
     let searchHistoryButton = searchHistory.appendChild(document.createElement("button"));
     searchHistoryButton.setAttribute('id', city);
     searchHistoryButton.classList.add("btn");
@@ -20,34 +26,48 @@ searchButton.addEventListener("click", function() {
     searchHistoryButton.classList.add("w-100");
     searchHistoryButton.classList.add("mt-3");
     searchHistoryButton.innerText = city;
-    fetchCityWeather();
+    
+    myStorage.setItem(city, city);
 }) 
 
+// Past searches event listener
+searchHistory.addEventListener("click", function(e) {
+    fetchCityWeather(e.target.innerText);
+}) 
+
+
 // API Call for city weather
-function fetchCityWeather() {
+function fetchCityWeather(city) {
     fetch("https://api.openweathermap.org/data/2.5/weather?q=" 
         + city + 
         "&units=imperial&appid=988c77a58d9ae4c18536f5b3fcc5e2b6")
     .then(response =>  response.json())
-    .then(function (data) {
-        fetchUVIData(data)
-    });
+    .then(data => fetchUVIData(data, city))
+    .catch((err) => {
+        return err;
+    })
 }
 
 // API Call for UV index Data
-function fetchUVIData(data) {
+function fetchUVIData(data, city) {
     const lat = data.coord.lat;
     const lon = data.coord.lon;
 
     fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial" + apiKey)
     .then(response =>  response.json())
     .then(function (uviData){
-        renderCurrentCityWeather(data, uviData); 
+        renderCurrentCityWeather(data, uviData, city); 
+        if(cardRow.innerHTML) {
+            cardRow.innerHTML = '';
+        }
         renderFiveDayForecast(uviData);
     });
 }
 
-function renderCurrentCityWeather(data, uviData) {
+function renderCurrentCityWeather(data, uviData, city) {
+    if(currentCityWeather[0].innerHTML) {
+        currentCityWeather[0].innerHTML = '';
+    }
 
     let iconSource = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
 
@@ -79,6 +99,8 @@ function renderCurrentCityWeather(data, uviData) {
     span.classList.add('badge');
     span.classList.add(uviInfoRender(uviData));
     span.innerText = uviData.current.uvi;
+
+    
 }
 
 function uviInfoRender(uviData) {
@@ -93,7 +115,6 @@ function uviInfoRender(uviData) {
 }
 
 function renderFiveDayForecast(uviData) {
-
     let forecastDays = uviData.daily;
     
     for (let i = 1; i <= 5; i++) {
@@ -121,8 +142,21 @@ function renderFiveDayForecast(uviData) {
        `;
 
        cardRow.innerHTML += generateFiveDay;
-
     }
 }
+
+function renderSearchHistory() {
+    let count = 0;
+    for (let city in myStorage) {
+        if (count < myStorage.length && count < 5) {
+            searchHistoryItem = `<button id="${myStorage[city]}" class="btn btn-secondary w-100 mt-3">${myStorage.getItem(myStorage[city])}</button>`
+            searchHistory.innerHTML += searchHistoryItem;
+            count++
+        }      
+    }
+}
+
+
+renderSearchHistory();
 
 
