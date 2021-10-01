@@ -28,7 +28,7 @@ The user can search for a city by inputting the city name in the search field. O
 
 Please email me at johanneschitura@gmail.com if you would like to contribute on this project.
 
-## Techonologies
+## Technologies
 
 - Javascript 
 - HTML 
